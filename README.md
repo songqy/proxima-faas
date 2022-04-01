@@ -1,3 +1,3 @@
-# proxima-fass
+# proxima-faas
 
 ## yarn start
