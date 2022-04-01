@@ -1,0 +1,20 @@
+{
+  "name": "proxima-faas",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "node ./app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@swc/core": "^1.2.161",
+    "express": "^4.17.3",
+    "isolated-vm": "^4.3.6",
+    "rollup": "^2.70.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.14.29",
+    "prettier": "^2.6.1",
+    "rollup-plugin-esbuild": "^4.8.2"
+  }
+}
