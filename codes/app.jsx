@@ -4,7 +4,7 @@ const Button = 'Button';
 const Space = 'Space';
 const Text = 'Text';
 
-// const sleep = (ms) => new Promise((resolve) => global.setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const App = () => {
   const [a, setA] = useState(2);
@@ -24,8 +24,8 @@ const App = () => {
   log('render', a, b);
 
   useEffect(async () => {
-    console.log('useEffect');
-    // await sleep(20);
+    log('useEffect');
+    await sleep(20);
     setA(4321);
   }, [b]);
 

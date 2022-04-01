@@ -20,9 +20,22 @@ const render = async (body) => {
   const context = isolate.createContextSync();
   const jail = context.global;
   jail.setSync('global', jail.derefInto());
-  jail.setSync('log', function (...args) {
-    console.log(...args);
-  });
+  // jail.setSync('log', function (...args) {
+  //   console.log(...args);
+  // });
+
+  context.evalClosureSync(
+    `
+      globalThis.log = $1
+      globalThis.setTimeout = (fn, ...rest) => $2(new $0.Reference(fn), ...rest);
+    `,
+    [
+      ivm,
+      (...args) => console.log(...args),
+      (fn, timeout) => void setTimeout(() => fn.applySync(), timeout),
+    ],
+  );
+
   const outRes = await script.run(context, { promise: true }).catch((err) => {
     console.error(err);
   });
