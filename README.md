@@ -1,8 +1,17 @@
 # proxima-faas
 
-## yarn start
+## 命令
+
+```bash
+yarn install
+yarn start
+```
 
 ## 项目结构
+
+### app.js
+
+应用的主入口，使用 express
 
 ### codes
 
@@ -12,6 +21,6 @@
 
 将插件代码打包和编译
 
-### app.js
+### render
 
-应用的主入口，使用 express
+使用 isolated 执行插件代码
