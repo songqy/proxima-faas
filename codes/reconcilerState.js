@@ -50,7 +50,11 @@ class ReconcilerState {
     return [
       this._stateHook[currentIndex],
       (val) => {
-        this._stateHook[currentIndex] = val;
+        let newVal = val;
+        if (typeof val === 'function') {
+          newVal = val(this._stateHook[currentIndex]);
+        }
+        this._stateHook[currentIndex] = newVal;
         this._effects.push(() => {
           console.log('setState');
         });
@@ -60,6 +64,7 @@ class ReconcilerState {
 
   useEffect(fun, deps) {
     const currentIndex = this._currentIndex;
+    this._currentIndex++;
     if (this._effectType === 'initial') {
       this._stateHook[currentIndex] = deps;
       this._effects.push(fun);

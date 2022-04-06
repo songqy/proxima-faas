@@ -11,23 +11,39 @@ const initA = async () => {
   return 136;
 };
 
+// 自定义Hook
+const useAppHook = () => {
+  const [d, setD] = useState(0);
+
+  const increaseD = () => {
+    setD((d) => d + 1);
+  };
+
+  return { d, increaseD };
+};
+
 const App = () => {
   const [a, setA] = useState(initA);
   const [b, setB] = useState('abc');
   const [c, setC] = useState({ c1: 2 });
+
+  const { d, increaseD } = useAppHook();
+
   const fb = () => {
-    console.log('fb', a, b);
     setA(99);
     setB('fb111111 bbbbbb');
   };
 
   const fb2 = () => {
-    console.log('fb2', a, b);
     setA(854);
     setB('fb222222 bbbbbb');
   };
 
-  log('render', a, b);
+  const fb3 = () => {
+    setC({ c1: 9 });
+  };
+
+  log('render', a, b, c, d);
 
   useEffect(async () => {
     log('useEffect');
@@ -41,12 +57,19 @@ const App = () => {
       <Text>a:{a}</Text>
       <Text>b:{b}</Text>
       <Text>c:{JSON.stringify(c)}</Text>
+      <Text>d:{d}</Text>
       <Space>
         <Button type="primary" onClick={fb}>
           btn1
         </Button>
         <Button type="dashed" onClick={fb2}>
           btn2
+        </Button>
+        <Button type="primary" onClick={fb3}>
+          btn3
+        </Button>
+        <Button type="primary" onClick={increaseD}>
+          increaseD
         </Button>
       </Space>
     </>
