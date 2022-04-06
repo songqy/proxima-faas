@@ -40,7 +40,7 @@ const render = async (body) => {
     console.error(err);
   });
 
-  console.log('outRes', outRes);
+  // console.log('outRes', outRes);
 
   return JSON.parse(outRes);
 };
