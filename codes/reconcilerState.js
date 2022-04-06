@@ -37,7 +37,14 @@ class ReconcilerState {
   useState(initialValue) {
     const currentIndex = this._currentIndex;
     if (this._effectType === 'initial') {
-      this._stateHook[currentIndex] = initialValue;
+      if (typeof initialValue === 'function') {
+        this._effects.push(async () => {
+          const val = await initialValue();
+          this._stateHook[currentIndex] = val;
+        });
+      } else {
+        this._stateHook[currentIndex] = initialValue;
+      }
     }
     this._currentIndex++;
     return [

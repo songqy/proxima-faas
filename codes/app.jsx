@@ -6,9 +6,15 @@ const Text = 'Text';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const initA = async () => {
+  await sleep(300);
+  return 136;
+};
+
 const App = () => {
-  const [a, setA] = useState(2);
+  const [a, setA] = useState(initA);
   const [b, setB] = useState('abc');
+  const [c, setC] = useState({ c1: 2 });
   const fb = () => {
     console.log('fb', a, b);
     setA(99);
@@ -26,7 +32,7 @@ const App = () => {
   useEffect(async () => {
     log('useEffect');
     await sleep(20);
-    setA(4321);
+    setC({ c1: 983 });
   }, [b]);
 
   return (
@@ -34,6 +40,7 @@ const App = () => {
       <Text>this is a text</Text>
       <Text>a:{a}</Text>
       <Text>b:{b}</Text>
+      <Text>c:{JSON.stringify(c)}</Text>
       <Space>
         <Button type="primary" onClick={fb}>
           btn1
