@@ -53,7 +53,7 @@ const parseAction = (eleObj) => {
 
 export const renderApp =
   (ele) =>
-  async ({ state, action }) => {
+  async ({ state, action } = {}) => {
     // console.log(ele);
     const actions = action?.split('.');
     reconcilerState.reset(state ? JSON.parse(state) : null);
@@ -68,7 +68,7 @@ export const renderApp =
       }
     }
 
-    while (reconcilerState.getEffects().length !== 0) {
+    while (reconcilerState.effects.length !== 0) {
       reconcilerState.resetCurrentIndex();
       const effect = reconcilerState.shiftEffect();
       await effect();
@@ -77,7 +77,7 @@ export const renderApp =
 
     return {
       ele: parseAction(res),
-      state: reconcilerState.getStateData(),
+      state: reconcilerState.stateData,
     };
   };
 

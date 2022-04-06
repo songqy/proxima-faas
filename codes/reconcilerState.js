@@ -10,8 +10,16 @@ class ReconcilerState {
     this._effects = [];
   }
 
-  getEffects() {
+  get effects() {
     return this._effects;
+  }
+
+  get stateData() {
+    const data = {
+      _stateHook: this._stateHook,
+      _effectType: this._effectType,
+    };
+    return JSON.stringify(data);
   }
 
   shiftEffect() {
@@ -24,14 +32,6 @@ class ReconcilerState {
 
   resetCurrentIndex() {
     this._currentIndex = 0;
-  }
-
-  getStateData() {
-    const data = {
-      _stateHook: this._stateHook,
-      _effectType: this._effectType,
-    };
-    return JSON.stringify(data);
   }
 
   useState(initialValue) {
