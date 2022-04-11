@@ -1,9 +1,13 @@
-import Px, { renderApp, useState, useEffect } from './px';
-
-const Button = 'Button';
-const Space = 'Space';
-const Text = 'Text';
-const Table = 'Table';
+import Px, {
+  renderApp,
+  useState,
+  useEffect,
+  Button,
+  Space,
+  Text,
+  Table,
+} from './px';
+import useTableData from './useTableData';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -23,63 +27,22 @@ const useAppHook = () => {
   return { d, increaseD };
 };
 
-const useTableData = () => {
-  const [data, setData] = useState([
-    {
-      key: 1,
-      name: '胡彦斌',
-      age: 32,
-      address: '西湖区湖底公园1号',
-    },
-    {
-      key: 2,
-      name: '胡彦祖',
-      age: 42,
-      address: '西湖区湖底公园1号',
-    },
-  ]);
-
-  const columns = [
-    {
-      title: '姓名',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: '年龄',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: '住址',
-      dataIndex: 'address',
-      key: 'address',
-    },
-  ];
-
-  const appendData = () => {
-    setData((d) => {
-      const len = d.length;
-      const newObj = {
-        key: len + 1,
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-      };
-      return [...d, newObj];
-    });
-  };
-
-  return { columns, data, appendData };
-};
-
 const App = () => {
   const [a, setA] = useState(initA);
   const [b, setB] = useState('abc');
   const [c, setC] = useState({ c1: 2 });
 
   const { d, increaseD } = useAppHook();
-  const { columns, data, appendData } = useTableData();
+
+  const { data, columns, appendData } = useTableData();
+
+  const renderTable = () => (
+    <Table
+      columns={columns}
+      dataSource={data}
+      pagination={{ showSizeChanger: true }}
+    />
+  );
 
   const fb = () => {
     setA(99);
@@ -127,11 +90,7 @@ const App = () => {
           添加table数据
         </Button>
       </Space>
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={{ showSizeChanger: true }}
-      />
+      {renderTable()}
     </>
   );
 };
