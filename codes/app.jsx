@@ -45,8 +45,9 @@ const App = () => {
   );
 
   const fb = () => {
-    setA(99);
     setB('fb111111 bbbbbb');
+    setA(91);
+    setA(92);
   };
 
   const fb2 = () => {

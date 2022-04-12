@@ -27,11 +27,12 @@ const _processElement = async (obj, getEventName, action) => {
       actions.push({
         event,
         name,
-        // dispatch,
       });
     }
   }
-  obj.props.actions = actions;
+  if (actions.length > 0) {
+    obj.props.actions = actions;
+  }
 
   return obj;
 };
@@ -54,6 +55,8 @@ const renderApp =
     reconcilerState.reset(state ? JSON.parse(state) : null);
     let res = await processElement(ele, action);
     reconcilerState.effectType = 'effect';
+
+    log('renderApp');
 
     while (reconcilerState.effects.length !== 0) {
       reconcilerState.resetCurrentIndex();

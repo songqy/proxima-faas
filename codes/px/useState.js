@@ -1,5 +1,35 @@
 import reconcilerState from './reconcilerState';
 
+const updateQueue = [];
+
+// state的批量更新
+const batchUpdate = (len) => {
+  if (len !== updateQueue.length) return;
+  const { hooks } = reconcilerState;
+  while (updateQueue.length !== 0) {
+    const { index, payload } = updateQueue.shift();
+    let newVal = payload;
+    if (typeof payload === 'function') {
+      newVal = payload(hooks[index]);
+    }
+    hooks[index] = newVal;
+  }
+  // 触发一次render
+  reconcilerState.enqueueEffect(() => {
+    // console.log('setState');
+  });
+};
+
+const enqueueUpdate = async (index, payload) => {
+  updateQueue.push({
+    index,
+    payload,
+  });
+  const len = updateQueue.length;
+  await Promise.resolve();
+  batchUpdate(len);
+};
+
 const useState = (initialValue) => {
   const { currentIndex, effectType, hooks } = reconcilerState;
   if (effectType === 'initial') {
@@ -16,15 +46,7 @@ const useState = (initialValue) => {
   return [
     hooks[currentIndex],
     (payload) => {
-      let newVal = payload;
-      if (typeof payload === 'function') {
-        newVal = payload(hooks[currentIndex]);
-      }
-      hooks[currentIndex] = newVal;
-      // 强制触发render
-      reconcilerState.enqueueEffect(() => {
-        console.log('setState');
-      });
+      enqueueUpdate(currentIndex, payload);
     },
   ];
 };
