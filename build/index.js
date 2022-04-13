@@ -20,7 +20,7 @@ const inputOptions = {
 
 const outputOptions = {
   file: path.resolve('output/index.js'),
-  format: 'cjs',
+  format: 'es',
 };
 
 async function build() {

@@ -7,6 +7,7 @@ import Px, {
   Text,
   Table,
 } from './px';
+import { fetch } from './api';
 import useTableData from './useTableData';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -44,10 +45,12 @@ const App = () => {
     />
   );
 
-  const fb = () => {
+  const fb = async () => {
     setB('fb111111 bbbbbb');
     setA(91);
     setA(92);
+    const res = await fetch();
+    setA(res);
   };
 
   const fb2 = () => {
@@ -62,9 +65,8 @@ const App = () => {
   log('render', a, b, c, d);
 
   useEffect(async () => {
-    log('useEffect');
-    await sleep(20);
-    setC({ c1: 983 });
+    const res = await fetch();
+    setC({ c1: res });
   }, [b]);
 
   return (
