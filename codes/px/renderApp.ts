@@ -1,4 +1,5 @@
 import reconcilerState from './reconcilerState';
+import type { ElementData } from './index';
 
 const events = ['onClick', 'onChange'];
 
@@ -37,9 +38,9 @@ const _processElement = async (obj, getEventName, action) => {
   return obj;
 };
 
-const processElement = async (ele, action) => {
+const processElement = async (ele: ElementData, action?: string) => {
   const { type, props } = ele;
-  const obj = type(props);
+  const obj = typeof type === 'function' ? type(props) : ele;
 
   let count = 0;
   const getEventName = (event) => {
@@ -48,9 +49,14 @@ const processElement = async (ele, action) => {
   return await _processElement(obj, getEventName, action);
 };
 
+interface RenderBody {
+  state?: string;
+  action?: string;
+}
+
 const renderApp =
-  (ele) =>
-  async ({ state, action } = {}) => {
+  (ele: ElementData) =>
+  async ({ state, action }: RenderBody = {}) => {
     // console.log(ele);
     reconcilerState.reset(state ? JSON.parse(state) : null);
     let res = await processElement(ele, action);

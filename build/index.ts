@@ -1,9 +1,9 @@
-const rollup = require('rollup');
-const path = require('path');
-const esbuild = require('rollup-plugin-esbuild').default;
+import { rollup, OutputOptions } from 'rollup';
+import path from 'path';
+import esbuild from 'rollup-plugin-esbuild';
 
 const inputOptions = {
-  input: path.resolve('codes/index.js'),
+  input: path.resolve('codes/index.ts'),
   plugins: [
     esbuild({
       include: /\.[jt]sx?$/, // default, inferred from `loaders` option
@@ -18,14 +18,14 @@ const inputOptions = {
   ],
 };
 
-const outputOptions = {
+const outputOptions: OutputOptions = {
   file: path.resolve('output/index.js'),
   format: 'es',
 };
 
 async function build() {
-  const bundle = await rollup.rollup(inputOptions);
+  const bundle = await rollup(inputOptions);
   await bundle.write(outputOptions);
 }
 
-module.exports = build;
+export default build;

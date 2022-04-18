@@ -3,7 +3,7 @@ import reconcilerState from './reconcilerState';
 const updateQueue = [];
 
 // state的批量更新
-const batchUpdate = (len) => {
+const batchUpdate = (len: number) => {
   if (len !== updateQueue.length) return;
   const { hooks } = reconcilerState;
   while (updateQueue.length !== 0) {

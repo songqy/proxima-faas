@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es6",
+    "module": "CommonJS",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "outDir": "./lib",
+    "sourceMap": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "include": [
+    "codes",
+    "src",
+    "build",
+  ]
+}

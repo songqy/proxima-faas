@@ -1,10 +1,9 @@
-const express = require('express');
-const app = express();
-const render = require('./render');
-const transform = require('./transform');
-const build = require('./build');
+import express from 'express';
+import render from './render';
+import build from '../build';
 
-// transform();
+const app = express();
+
 build();
 
 app.use(express.json()); // for parsing application/json

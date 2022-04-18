@@ -1,9 +1,13 @@
 class ReconcilerState {
-  constructor(props) {
+  _hooks: any[];
+  _effectType: string;
+  _currentIndex: number;
+  _effects: Function[];
+  constructor() {
     this.reset();
   }
 
-  reset(data) {
+  reset(data?: Record<string, any>) {
     this._hooks = data?._hooks ?? [];
     this._effectType = data?._effectType ?? 'initial';
     this._currentIndex = 0;

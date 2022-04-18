@@ -1,4 +1,14 @@
-const createElement = (type, props, ...children) => {
+export type ElementType = string | Function;
+export interface ElementData {
+  type: ElementType;
+  props: Record<string, any>;
+}
+
+const createElement = (
+  type: ElementType,
+  props: Record<string, any>,
+  ...children: any[]
+): ElementData => {
   return {
     type,
     props: {

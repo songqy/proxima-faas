@@ -1,12 +1,13 @@
-const ivm = require('isolated-vm');
-const fs = require('fs');
-const path = require('path');
+import ivm, { Module } from 'isolated-vm';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const isolate = new ivm.Isolate({ memoryLimit: 128 });
 
-function noModule(specifier) {
+function noModule(specifier: string): Module {
   throw new Error(`Cannot import module '${specifier}'`);
 }
 
@@ -36,10 +37,14 @@ const getAppModule = async () => {
   // 注入异步方法
   appContext.evalClosure(
     `
-      globalThis.fetch = () => $0.apply(null, [], { result: { promise: true } });
+      globalThis.fetch = (opts) => $0.apply(null, [opts], { result: { promise: true } });
     `,
     [
-      new ivm.Reference(async () => {
+      new ivm.Reference(async (opts) => {
+        console.log('fetch', opts);
+        if (opts) {
+          return await axios(opts);
+        }
         await sleep(200);
         return 69328;
       }),
@@ -52,7 +57,7 @@ const getAppModule = async () => {
   return appModule;
 };
 
-const render = async (body) => {
+const render = async (body?: Record<string, unknown>) => {
   const appModule = await getAppModule();
 
   // 使用app module
@@ -98,4 +103,4 @@ const render = async (body) => {
   return JSON.parse(result);
 };
 
-module.exports = render;
+export default render;
