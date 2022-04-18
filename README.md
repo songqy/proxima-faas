@@ -9,7 +9,7 @@ yarn start
 
 ## 项目结构
 
-### app.js
+### src
 
 应用的主入口，使用 express
 
@@ -20,7 +20,3 @@ yarn start
 ### build
 
 将插件代码打包和编译
-
-### render
-
-使用 isolated 执行插件代码
