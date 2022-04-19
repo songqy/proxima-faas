@@ -1,9 +1,12 @@
 import reconcilerState from './reconcilerState';
-import type { ElementData } from './index';
+import type { ElementData } from './interface';
 
 const events = ['onClick', 'onChange'];
 
-const _processElement = async (obj, getEventName, action) => {
+const _processElement = async (ele, getEventName, action) => {
+  const { type, props } = ele;
+  const obj = typeof type === 'function' ? type(props) : ele;
+
   if (obj.props?.children?.length) {
     const childrens = [];
     for (const item of obj.props.children) {

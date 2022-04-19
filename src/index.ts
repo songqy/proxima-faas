@@ -2,9 +2,10 @@ import express from 'express';
 import render from './render';
 import build from '../build';
 
-const app = express();
-
+// 打包编译前端代码
 build();
+
+const app = express();
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

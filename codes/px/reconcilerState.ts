@@ -1,8 +1,10 @@
+import type { EffectFun } from './interface';
+
 class ReconcilerState {
   _hooks: any[];
   _effectType: string;
   _currentIndex: number;
-  _effects: Function[];
+  _effects: EffectFun[];
   constructor() {
     this.reset();
   }

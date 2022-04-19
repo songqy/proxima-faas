@@ -57,7 +57,7 @@ const getAppModule = async () => {
   return appModule;
 };
 
-const render = async (body?: Record<string, unknown>) => {
+const render = async (body?: Record<string, any>) => {
   const appModule = await getAppModule();
 
   // 使用app module

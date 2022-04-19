@@ -9,6 +9,7 @@ import Px, {
 } from './px';
 import { fetch } from './api';
 import useTableData from './useTableData';
+import User from './components/User';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,8 +30,8 @@ const useAppHook = () => {
 };
 
 const App = () => {
-  const [a, setA] = useState(initA);
-  const [b, setB] = useState('abc');
+  const [a, setA] = useState<number>(initA);
+  const [b, setB] = useState<string>('abc');
   const [c, setC] = useState({ c1: 2 });
 
   const { d, increaseD } = useAppHook();
@@ -93,6 +94,10 @@ const App = () => {
           添加table数据
         </Button>
       </Space>
+      <Text style={{ margin: '10px 0' }}>
+        {/* 使用自定义组件 */}
+        <User count={d} />
+      </Text>
       {renderTable()}
     </>
   );

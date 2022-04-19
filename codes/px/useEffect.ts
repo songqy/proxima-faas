@@ -1,6 +1,7 @@
 import reconcilerState from './reconcilerState';
+import type { EffectFun } from './interface';
 
-const useEffect = (fun, deps) => {
+const useEffect = (fun: EffectFun, deps: any[]) => {
   const { currentIndex, hooks, effectType } = reconcilerState;
   reconcilerState.currentIndex++;
   if (effectType === 'initial') {

@@ -1,8 +1,4 @@
-export type ElementType = string | Function;
-export interface ElementData {
-  type: ElementType;
-  props: Record<string, any>;
-}
+import type { ElementType, ElementData } from './interface';
 
 const createElement = (
   type: ElementType,

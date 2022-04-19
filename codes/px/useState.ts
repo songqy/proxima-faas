@@ -1,6 +1,13 @@
 import reconcilerState from './reconcilerState';
 
-const updateQueue = [];
+export type Payload<T> = T | ((val: T) => T) | undefined;
+
+interface UpdateItem {
+  index: number;
+  payload: Payload<any>;
+}
+
+const updateQueue: UpdateItem[] = [];
 
 // state的批量更新
 const batchUpdate = (len: number) => {
@@ -20,7 +27,7 @@ const batchUpdate = (len: number) => {
   });
 };
 
-const enqueueUpdate = async (index, payload) => {
+const enqueueUpdate = async (index: number, payload: Payload<any>) => {
   updateQueue.push({
     index,
     payload,
@@ -30,16 +37,19 @@ const enqueueUpdate = async (index, payload) => {
   batchUpdate(len);
 };
 
-const useState = (initialValue) => {
+const useState = <T>(
+  initialState: T | (() => Promise<T> | (() => T)),
+): [T, (payload: Payload<T>) => void] => {
   const { currentIndex, effectType, hooks } = reconcilerState;
   if (effectType === 'initial') {
-    if (typeof initialValue === 'function') {
+    if (typeof initialState === 'function') {
       reconcilerState.enqueueEffect(async () => {
-        const val = await initialValue();
+        // @ts-ignore
+        const val = await initialState();
         hooks[currentIndex] = val;
       });
     } else {
-      hooks[currentIndex] = initialValue;
+      hooks[currentIndex] = initialState;
     }
   }
   reconcilerState.currentIndex++;
