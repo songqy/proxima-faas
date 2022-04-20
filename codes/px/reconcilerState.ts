@@ -6,14 +6,15 @@ class ReconcilerState {
   _currentIndex: number;
   _effects: EffectCallback[];
   constructor() {
-    this.reset();
+    this._hooks = [];
+    this._effectType = 'initial';
+    this._currentIndex = 0;
+    this._effects = [];
   }
 
   reset(data?: Record<string, any>) {
     this._hooks = data?._hooks ?? [];
     this._effectType = data?._effectType ?? 'initial';
-    this._currentIndex = 0;
-    this._effects = [];
   }
 
   get effects() {
@@ -52,7 +53,7 @@ class ReconcilerState {
     return this._effects.shift();
   }
 
-  enqueueEffect(effect) {
+  enqueueEffect(effect: EffectCallback) {
     this._effects.push(effect);
   }
 

@@ -14,7 +14,7 @@ const batchUpdate = (len: number) => {
   if (len !== updateQueue.length) return;
   const { hooks } = reconcilerState;
   while (updateQueue.length !== 0) {
-    const { index, payload } = updateQueue.shift();
+    const { index, payload } = updateQueue.shift()!;
     let newVal = payload;
     if (typeof payload === 'function') {
       newVal = payload(hooks[index]);

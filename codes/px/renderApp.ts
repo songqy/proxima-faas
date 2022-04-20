@@ -30,7 +30,7 @@ const _processElement = async (
       const dispatch = obj.props[event];
       const name = getEventName(event);
       if (name === action?.name) {
-        await dispatch(...action.payload);
+        await dispatch(...(action.payload || []));
       }
       actions.push({
         event,
@@ -68,7 +68,7 @@ const renderApp =
 
     while (reconcilerState.effects.length !== 0) {
       reconcilerState.resetCurrentIndex();
-      const effect = reconcilerState.shiftEffect();
+      const effect = reconcilerState.shiftEffect()!;
       await effect();
       res = await processElement(ele);
     }

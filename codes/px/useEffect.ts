@@ -7,6 +7,8 @@ const useEffect = (effect: EffectCallback, deps?: DependencyList) => {
   if (effectType === 'initial') {
     hooks[currentIndex] = deps;
     reconcilerState.enqueueEffect(effect);
+  } else if (!deps) {
+    reconcilerState.enqueueEffect(effect);
   } else {
     const prevDeps = hooks[currentIndex];
     for (let i = 0; i < deps.length; ++i) {

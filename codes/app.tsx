@@ -11,7 +11,7 @@ import { fetch } from './api';
 import useTableData from './useTableData';
 import User from './components/User';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const initA = async () => {
   await sleep(300);

@@ -1,9 +1,9 @@
 import ivm, { Module } from 'isolated-vm';
 import fs from 'fs';
 import path from 'path';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const isolate = new ivm.Isolate({ memoryLimit: 128 });
 
@@ -30,8 +30,9 @@ const getAppModule = async () => {
     `,
     [
       ivm,
-      (...args) => console.log(...args),
-      (fn, timeout) => void setTimeout(() => fn.applySync(), timeout),
+      (...args: any[]) => console.log(...args),
+      (fn: any, timeout: number) =>
+        void setTimeout(() => fn.applySync(), timeout),
     ],
   );
   // 注入异步方法
@@ -40,7 +41,7 @@ const getAppModule = async () => {
       globalThis.fetch = (opts) => $0.apply(null, [opts], { result: { promise: true } });
     `,
     [
-      new ivm.Reference(async (opts) => {
+      new ivm.Reference(async (opts: AxiosRequestConfig) => {
         console.log('fetch', opts);
         if (opts) {
           return await axios(opts);

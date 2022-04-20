@@ -32,7 +32,7 @@ app.get('/500', (req, res) => {
 });
 
 // Error handler
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res: any) {
   console.error(err);
   res.status(500).send('Internal Serverless Error');
 });
