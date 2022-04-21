@@ -8,7 +8,7 @@ const inputOptions = {
     esbuild({
       include: /\.[jt]sx?$/, // default, inferred from `loaders` option
       exclude: /node_modules/, // default
-      sourceMap: false, // by default inferred from rollup's `output.sourcemap` option
+      sourceMap: true, // by default inferred from rollup's `output.sourcemap` option
       minify: process.env.NODE_ENV === 'production',
       target: 'es2017', // default, or 'es20XX', 'esnext'
       jsx: 'transform', // default, or 'preserve'
@@ -21,6 +21,7 @@ const inputOptions = {
 const outputOptions: OutputOptions = {
   file: path.resolve('output/index.js'),
   format: 'es',
+  sourcemap: true,
 };
 
 async function build() {

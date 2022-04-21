@@ -52,7 +52,9 @@ const getAppModule = async () => {
     ],
   );
 
-  const appModule = await isolate.compileModule(codes);
+  const appModule = await isolate.compileModule(codes, {
+    filename: path.resolve('output/index.js'),
+  });
   await appModule.instantiate(appContext, noModule);
 
   return appModule;
@@ -77,7 +79,15 @@ const render = async (body?: Record<string, any>) => {
       import { render } from 'app';
 
       export async function main() {
-        const res = await render(global.reqData);
+        let res;
+        try {
+          res = await render(global.reqData);
+        } catch (e) {
+          res = {
+            errMessage: e.message,
+            stack: e.stack,
+          }
+        }
         return JSON.stringify(res);
       }
     `,

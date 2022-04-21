@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/express": "^4.17.13",
     "@types/node": "^16",
-    "esbuild": "^0.14.29",
+    "esbuild": "^0.14.37",
     "prettier": "^2.6.1",
     "rollup-plugin-esbuild": "^4.8.2"
   }
