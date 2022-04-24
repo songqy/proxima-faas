@@ -19,6 +19,8 @@
     "@types/node": "^16",
     "esbuild": "^0.14.37",
     "prettier": "^2.6.1",
-    "rollup-plugin-esbuild": "^4.8.2"
+    "rollup-plugin-esbuild": "^4.8.2",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "vlq": "^2.0.4"
   }
 }

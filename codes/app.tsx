@@ -63,6 +63,10 @@ const App = () => {
     setC({ c1: 9 });
   };
 
+  const fb4 = () => {
+    throw new Error('fb4 error');
+  };
+
   log('render', a, b, c, d);
 
   useEffect(async () => {
@@ -86,6 +90,9 @@ const App = () => {
         </Button>
         <Button type="primary" onClick={fb3}>
           btn3
+        </Button>
+        <Button type="primary" onClick={fb4}>
+          点击抛出异常
         </Button>
         <Button type="primary" onClick={increaseD}>
           increaseD

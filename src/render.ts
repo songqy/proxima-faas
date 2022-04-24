@@ -2,6 +2,7 @@ import ivm, { Module } from 'isolated-vm';
 import fs from 'fs';
 import path from 'path';
 import axios, { AxiosRequestConfig } from 'axios';
+import getSourceStack from './getSourceStack';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -111,7 +112,12 @@ const render = async (body?: Record<string, any>) => {
     { result: { promise: true } },
   );
 
-  return JSON.parse(result);
+  const resObj = JSON.parse(result);
+  if (resObj.errMessage) {
+    resObj.stack = await getSourceStack(resObj.stack);
+  }
+
+  return resObj;
 };
 
 export default render;
