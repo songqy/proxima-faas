@@ -17,7 +17,7 @@ const createElement = (
 export const Fragment = 'Fragment';
 
 export default { createElement, Fragment };
-export { default as useState } from './useState';
-export { default as useEffect } from './useEffect';
+export { default as useState } from './hooks/useState';
+export { default as useEffect } from './hooks/useEffect';
 export { default as renderApp } from './renderApp';
 export * from './components';

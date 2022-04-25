@@ -10,6 +10,7 @@ import Px, {
 import { fetch } from './api';
 import useTableData from './useTableData';
 import User from './components/User';
+import CustomInput from './components/CustomInput';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -29,7 +30,12 @@ const useAppHook = () => {
   return { d, increaseD };
 };
 
-const App = () => {
+export interface AppProps {
+  name?: string;
+}
+
+const App = (props: AppProps = {}) => {
+  const { name = 'Plugin name' } = props;
   const [a, setA] = useState<number>(initA);
   const [b, setB] = useState<string>('abc');
   const [c, setC] = useState({ c1: 2 });
@@ -76,7 +82,7 @@ const App = () => {
 
   return (
     <>
-      <Text>this is a text</Text>
+      <Text>{name}</Text>
       <Text>a:{a}</Text>
       <Text>b:{b}</Text>
       <Text>c:{JSON.stringify(c)}</Text>
@@ -105,6 +111,7 @@ const App = () => {
         {/* 使用自定义组件 */}
         <User count={d} />
       </Text>
+      <CustomInput />
       {renderTable()}
     </>
   );

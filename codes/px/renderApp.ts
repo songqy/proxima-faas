@@ -5,17 +5,25 @@ const events = ['onClick', 'onChange'];
 
 const _processElement = async (
   ele: ElementData,
-  getEventName: (event: string) => string,
+  getUniqueName: (name: string) => string,
   action?: Action,
 ) => {
   const { type, props } = ele;
-  const obj = typeof type === 'function' ? type(props) : ele;
+  let key = '';
+  let obj;
+  if (typeof type === 'function') {
+    obj = type(props);
+    key = getUniqueName(type.name);
+  } else {
+    obj = ele;
+    key = getUniqueName(type);
+  }
 
   if (obj.props?.children?.length) {
     const childrens = [];
     for (const item of obj.props.children) {
       if (typeof item === 'object') {
-        const result = await _processElement(item, getEventName, action);
+        const result = await _processElement(item, getUniqueName, action);
         childrens.push(result);
       } else {
         childrens.push(item);
@@ -28,7 +36,7 @@ const _processElement = async (
   for (const event of events) {
     if (obj.props[event]) {
       const dispatch = obj.props[event];
-      const name = getEventName(event);
+      const name = `${event}.${key}`;
       if (name === action?.name) {
         await dispatch(...(action.payload || []));
       }
@@ -38,30 +46,36 @@ const _processElement = async (
       });
     }
   }
-  if (actions.length > 0) {
+  if (actions.length) {
     obj.props.actions = actions;
   }
+
+  obj.props.key = key;
 
   return obj;
 };
 
 const processElement = async (ele: ElementData, action?: Action) => {
-  let count = 0;
-  const getEventName = (event: string) => {
-    return `${event}.${count++}`;
+  let visitedNames: Record<string, number> = {};
+  const getUniqueName = (name: string) => {
+    if (!visitedNames[name]) {
+      visitedNames[name] = 0;
+    }
+    return `${name}.${visitedNames[name]++}`;
   };
-  return await _processElement(ele, getEventName, action);
+  return await _processElement(ele, getUniqueName, action);
 };
 
 interface RenderBody {
   state?: string;
   action?: Action;
+  props?: Record<string, any>;
 }
 
 const renderApp =
   (ele: ElementData) =>
-  async ({ state, action }: RenderBody = {}) => {
-    // console.log(ele);
+  async ({ state, action, props }: RenderBody = {}) => {
+    ele.props = { ...ele.props, ...props };
     reconcilerState.reset(state ? JSON.parse(state) : null);
     let res = await processElement(ele, action);
     reconcilerState.effectType = 'effect';

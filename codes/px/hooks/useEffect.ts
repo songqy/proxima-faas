@@ -1,5 +1,5 @@
-import reconcilerState from './reconcilerState';
-import type { EffectCallback, DependencyList } from './interface';
+import reconcilerState from '../reconcilerState';
+import type { EffectCallback, DependencyList } from '../interface';
 
 const useEffect = (effect: EffectCallback, deps?: DependencyList) => {
   const { currentIndex, hooks, effectType } = reconcilerState;

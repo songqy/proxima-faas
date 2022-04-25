@@ -1,4 +1,4 @@
-import reconcilerState from './reconcilerState';
+import reconcilerState from '../reconcilerState';
 
 export type Payload<T> = T | ((val: T) => T) | undefined;
 
