@@ -11,6 +11,7 @@ import { fetch } from './api';
 import useTableData from './useTableData';
 import User from './components/User';
 import CustomInput from './components/CustomInput';
+import { cloneDeep } from 'lodash-es';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -77,7 +78,8 @@ const App = (props: AppProps = {}) => {
 
   useEffect(async () => {
     const res = await fetch();
-    setC({ c1: res });
+    // setC({ c1: res });
+    setC(cloneDeep({ c1: res }));
   }, [b]);
 
   return (

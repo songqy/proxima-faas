@@ -2,6 +2,8 @@ import { rollup, OutputOptions, Plugin, RollupOptions } from 'rollup';
 import path from 'path';
 import esbuild from 'rollup-plugin-esbuild';
 import typescript from 'rollup-plugin-typescript2';
+import resolve from 'rollup-plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 
 enum MODE {
   DEV = 'dev',
@@ -9,7 +11,7 @@ enum MODE {
 }
 
 function getRollupOptions(mode: MODE) {
-  const plugins: Plugin[] = [];
+  const plugins: Plugin[] = [resolve(), commonjs()];
   if (mode === MODE.DEV) {
     plugins.push(
       typescript({
@@ -24,7 +26,6 @@ function getRollupOptions(mode: MODE) {
           exclude: ['node_modules'],
         },
       }),
-      // terser(),
     );
   } else {
     plugins.push(
