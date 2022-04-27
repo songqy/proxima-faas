@@ -15,7 +15,7 @@ import { render } from 'app';
 export async function main() {
   let res;
   try {
-    res = await render(global.reqData);
+    res = await render(global.renderData);
   } catch (e) {
     res = {
       errMessage: e.message,
@@ -77,7 +77,7 @@ const getAppModule = async () => {
   return appModule;
 };
 
-const render = async (body?: Record<string, any>) => {
+const render = async (renderData?: Record<string, any>) => {
   const appModule = await getAppModule();
 
   // 入口模块
@@ -90,7 +90,7 @@ const render = async (body?: Record<string, any>) => {
   // 注入全局变量
   context.evalClosure(
     'Object.entries($0).forEach(([ key, val ]) => globalThis[key] = val)',
-    [{ reqData: body }],
+    [{ renderData }],
     { arguments: { copy: true } },
   );
 

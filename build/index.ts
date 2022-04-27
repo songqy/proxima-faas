@@ -5,6 +5,7 @@ import esbuild from 'rollup-plugin-esbuild';
 import typescript from 'rollup-plugin-typescript2';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import cleanup from 'rollup-plugin-cleanup';
 import { setCacheCodes } from '../src/cacheCodes';
 
 enum MODE {
@@ -28,6 +29,7 @@ function getRollupOptions(mode: MODE) {
           exclude: ['node_modules'],
         },
       }),
+      cleanup({ comments: 'ts', extensions: ['js', 'jsx', 'ts', 'tsx'] }),
     );
   } else {
     plugins.push(
@@ -68,6 +70,8 @@ async function build() {
 
   await fs.promises.writeFile(path.resolve('output/index.js'), code);
   if (map) {
+    map.sourcesContent = [];
+    map.names = [];
     await fs.promises.writeFile(
       path.resolve('output/index.js.map'),
       JSON.stringify(map),

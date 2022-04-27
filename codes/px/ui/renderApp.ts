@@ -66,7 +66,7 @@ const processElement = async (ele: ElementData, action?: Action) => {
   return await _processElement(ele, getUniqueName, action);
 };
 
-interface RenderBody {
+interface RenderData {
   state?: string;
   action?: Action;
   props?: Record<string, any>;
@@ -74,7 +74,7 @@ interface RenderBody {
 
 const renderApp =
   (ele: ElementData) =>
-  async ({ state, action, props }: RenderBody = {}) => {
+  async ({ state, action, props }: RenderData = {}) => {
     ele.props = { ...ele.props, ...props };
     reconcilerState.reset(state ? JSON.parse(state) : null);
     let latestEle = await processElement(ele, action);
