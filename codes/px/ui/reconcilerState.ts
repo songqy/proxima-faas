@@ -1,4 +1,4 @@
-import type { EffectCallback } from './interface';
+import type { EffectCallback, StateData } from './interface';
 
 class ReconcilerState {
   _hooks: any[];
@@ -12,9 +12,9 @@ class ReconcilerState {
     this._effects = [];
   }
 
-  reset(data?: Record<string, any>) {
-    this._hooks = data?._hooks ?? [];
-    this._effectType = data?._effectType ?? 'initial';
+  reset(data?: StateData) {
+    this._hooks = data?._hooks ?? this._hooks;
+    this._effectType = data?._effectType ?? this._effectType;
   }
 
   get effects() {

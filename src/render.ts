@@ -1,23 +1,39 @@
-import ivm, { Module } from 'isolated-vm';
-import fs from 'fs';
+import ivm from 'isolated-vm';
 import path from 'path';
 import axios, { AxiosRequestConfig } from 'axios';
 import getSourceStack from './getSourceStack';
+import { getCacheCodes } from './cacheCodes';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const isolate = new ivm.Isolate({ memoryLimit: 128 });
 
-function noModule(specifier: string): Module {
-  throw new Error(`Cannot import module '${specifier}'`);
+// 入口模块代码
+const mainScript = `
+import { render } from 'app';
+
+export async function main() {
+  let res;
+  try {
+    res = await render(global.reqData);
+  } catch (e) {
+    res = {
+      errMessage: e.message,
+      stack: e.stack,
+    }
+  }
+  return JSON.stringify(res);
 }
+`;
 
+// 返回一个空的Module
+const getEmptyModule = async () => {
+  return await isolate.compileModule('');
+};
+
+// 返回应用的模块
 const getAppModule = async () => {
-  const codeBuffer = await fs.promises.readFile(
-    path.resolve('output/index.js'),
-  );
-
-  const codes = codeBuffer.toString();
+  const { code } = getCacheCodes();
 
   // 构建app module
   const appContext = isolate.createContextSync();
@@ -53,10 +69,10 @@ const getAppModule = async () => {
     ],
   );
 
-  const appModule = await isolate.compileModule(codes, {
+  const appModule = await isolate.compileModule(code, {
     filename: path.resolve('output/index.js'),
   });
-  await appModule.instantiate(appContext, noModule);
+  await appModule.instantiate(appContext, getEmptyModule);
 
   return appModule;
 };
@@ -64,7 +80,10 @@ const getAppModule = async () => {
 const render = async (body?: Record<string, any>) => {
   const appModule = await getAppModule();
 
-  // 使用app module
+  // 入口模块
+  const mainModule = await isolate.compileModule(mainScript);
+
+  // 入口模块的全局变量
   const context = isolate.createContextSync();
   const jail = context.global;
   jail.setSync('global', jail.derefInto());
@@ -75,39 +94,20 @@ const render = async (body?: Record<string, any>) => {
     { arguments: { copy: true } },
   );
 
-  const module = await isolate.compileModule(
-    `
-      import { render } from 'app';
-
-      export async function main() {
-        let res;
-        try {
-          res = await render(global.reqData);
-        } catch (e) {
-          res = {
-            errMessage: e.message,
-            stack: e.stack,
-          }
-        }
-        return JSON.stringify(res);
-      }
-    `,
-  );
-
-  await module.instantiate(context, (specifier) => {
+  await mainModule.instantiate(context, async (specifier) => {
     if (specifier === 'app') {
       return appModule;
     }
-    throw new Error();
+    return await getEmptyModule();
+    // 使用throw会导致错误无法捕捉
+    // throw new Error(`Cannot import module '${specifier}'`);
   });
-  await module.evaluate();
+  await mainModule.evaluate();
 
-  const main = await module.namespace.get('main', { reference: true });
+  const main = await mainModule.namespace.get('main', { reference: true });
 
   const result = await context.evalClosure(
-    `
-    return Promise.resolve(($0.deref())());
-    `,
+    'return Promise.resolve(($0.deref())());',
     [main],
     { result: { promise: true } },
   );

@@ -1,4 +1,4 @@
-import Px, { Badge, Avatar, useState, useEffect } from '../px';
+import Px, { Badge, Avatar, useState, useEffect } from '../px/ui';
 
 export interface UserProps {
   count?: number;

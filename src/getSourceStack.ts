@@ -1,33 +1,15 @@
-import fs from 'fs';
-import path from 'path';
 import { decode } from 'vlq';
-
-interface SourceMap {
-  version: number;
-  file: string;
-  sources: string[];
-  sourcesContent: string[];
-  names: string[];
-  mappings: string;
-}
-
-interface CacheSourceMap {
-  sources: string[];
-  mappingsCoordinate: number[][][];
-}
+import { getCacheCodes } from './cacheCodes';
+import type { CacheSourceMap } from './types';
 
 const cacheSourceMap: CacheSourceMap = {
   sources: [],
   mappingsCoordinate: [],
 };
 
-const readSouceMap = async () => {
-  const strBuffer = await fs.promises.readFile(
-    path.resolve('output/index.js.map'),
-  );
-  const sourceMapStr = strBuffer.toString();
-  const sourceMap: SourceMap = JSON.parse(sourceMapStr);
-  return sourceMap;
+const readSouceMap = () => {
+  const { map } = getCacheCodes();
+  return map!;
 };
 
 // 两个数字数组相加
@@ -82,9 +64,9 @@ const decodeMappings = (mappings: string) => {
 };
 
 // 解析sourcemap的坐标
-const parseSourceMap = async () => {
+const parseSourceMap = () => {
   if (cacheSourceMap.sources.length) return;
-  const { sources, mappings } = await readSouceMap();
+  const { sources, mappings } = readSouceMap();
   const arr = decodeMappings(mappings);
   cacheSourceMap.sources = sources;
   cacheSourceMap.mappingsCoordinate = arr;
@@ -111,7 +93,7 @@ const replaceStackBySource = (target: string) => {
 // 通过isolate抛出的调用栈解析出源码调用栈
 const getSourceStack = async (stack: string) => {
   // 解析sourcemap
-  await parseSourceMap();
+  parseSourceMap();
 
   const newStack = stack.replace(/(\/.+)+:(\d)+:(\d)+/g, replaceStackBySource);
   return newStack;

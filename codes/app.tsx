@@ -6,8 +6,8 @@ import Px, {
   Space,
   Text,
   Table,
-} from './px';
-import { fetch } from './api';
+} from './px/ui';
+import { fetch } from './px/api';
 import useTableData from './useTableData';
 import User from './components/User';
 import CustomInput from './components/CustomInput';

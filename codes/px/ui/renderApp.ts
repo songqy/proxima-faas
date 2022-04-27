@@ -77,18 +77,18 @@ const renderApp =
   async ({ state, action, props }: RenderBody = {}) => {
     ele.props = { ...ele.props, ...props };
     reconcilerState.reset(state ? JSON.parse(state) : null);
-    let res = await processElement(ele, action);
+    let latestEle = await processElement(ele, action);
     reconcilerState.effectType = 'effect';
 
     while (reconcilerState.effects.length !== 0) {
       reconcilerState.resetCurrentIndex();
       const effect = reconcilerState.shiftEffect()!;
       await effect();
-      res = await processElement(ele);
+      latestEle = await processElement(ele);
     }
 
     return {
-      ele: res,
+      ele: latestEle,
       state: reconcilerState.stateData,
     };
   };

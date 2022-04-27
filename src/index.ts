@@ -16,11 +16,18 @@ app.get(`/`, async (req, res) => {
   res.json(renderRes);
 });
 
-app.post('/', async (req, res) => {
+app.post('/', async (req, res, next) => {
   const body = req.body;
   console.log('body', body);
-  const renderRes = await render(body);
-  res.json(renderRes);
+  try {
+    const renderRes = await render(body);
+    res.json(renderRes);
+  } catch (err) {
+    // console.log('err', err);
+    if (err instanceof Error) {
+      res.status(500).send(err.stack);
+    }
+  }
 });
 
 app.get('/404', (req, res) => {

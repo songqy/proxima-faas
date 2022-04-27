@@ -1,4 +1,4 @@
-import { useState } from './px';
+import { useState } from './px/ui';
 
 const useTableData = () => {
   const [data, setData] = useState([

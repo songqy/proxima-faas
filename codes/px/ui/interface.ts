@@ -10,3 +10,8 @@ export interface Action {
   name: string;
   payload?: any[];
 }
+
+export interface StateData {
+  _hooks: any[];
+  _effectType: string;
+}
