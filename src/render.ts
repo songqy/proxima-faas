@@ -18,7 +18,7 @@ export async function main() {
     res = await render(global.renderData);
   } catch (e) {
     res = {
-      errMessage: e.message,
+      message: e.message,
       stack: e.stack,
     }
   }
@@ -27,9 +27,7 @@ export async function main() {
 `;
 
 // 返回一个空的Module
-const getEmptyModule = async () => {
-  return await isolate.compileModule('');
-};
+const getEmptyModule = () => isolate.compileModule('');
 
 // 返回应用的模块
 const getAppModule = async () => {

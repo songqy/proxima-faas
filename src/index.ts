@@ -25,7 +25,11 @@ app.post('/', async (req, res, next) => {
   } catch (err) {
     // console.log('err', err);
     if (err instanceof Error) {
-      res.status(500).send(err.stack);
+      const renderRes = {
+        message: 'Internal Server Error',
+        stack: err.stack,
+      };
+      res.json(renderRes);
     }
   }
 });
