@@ -1,4 +1,4 @@
-import Px, {
+import Nebula, {
   renderApp,
   useState,
   useEffect,
@@ -6,8 +6,8 @@ import Px, {
   Space,
   Text,
   Table,
-} from './px/ui';
-import { fetch } from './px/api';
+} from './nebula/ui';
+import { fetch } from './nebula/api';
 import useTableData from './useTableData';
 import User from './components/User';
 import CustomInput from './components/CustomInput';
@@ -37,8 +37,8 @@ export interface AppProps {
 
 const App = (props: AppProps = {}) => {
   const { name = 'Plugin name' } = props;
-  const [a, setA] = useState<number>(initA);
-  const [b, setB] = useState<string>('abc');
+  const [a, setA] = useState(initA);
+  const [b, setB] = useState(() => 'abc');
   const [c, setC] = useState({ c1: 2 });
 
   const { d, increaseD } = useAppHook();

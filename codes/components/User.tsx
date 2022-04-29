@@ -1,4 +1,4 @@
-import Px, { Badge, Avatar, useState, useEffect } from '../px/ui';
+import Nebula, { Badge, Avatar, useState, useEffect } from '../nebula/ui';
 
 export interface UserProps {
   count?: number;

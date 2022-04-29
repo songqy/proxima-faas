@@ -2,6 +2,8 @@ import express from 'express';
 import render from './render';
 import build from '../build';
 
+import 'dotenv/config';
+
 // 打包编译前端代码
 build();
 

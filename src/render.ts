@@ -111,8 +111,8 @@ const render = async (renderData?: Record<string, any>) => {
   );
 
   const resObj = JSON.parse(result);
-  if (resObj.errMessage) {
-    resObj.stack = await getSourceStack(resObj.stack);
+  if (resObj.stack) {
+    resObj.stack = getSourceStack(resObj.stack);
   }
 
   return resObj;

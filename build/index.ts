@@ -3,28 +3,28 @@ import path from 'path';
 import fs from 'fs';
 import esbuild from 'rollup-plugin-esbuild';
 import typescript from 'rollup-plugin-typescript2';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 import cleanup from 'rollup-plugin-cleanup';
 import { setCacheCodes } from '../src/cacheCodes';
 
 enum MODE {
-  DEV = 'dev',
-  PROD = 'prod',
+  DEV = 'development',
+  PROD = 'production',
 }
 
-function getRollupOptions(mode: MODE) {
-  const plugins: Plugin[] = [resolve(), commonjs()];
+function getRollupOptions(mode = MODE.DEV) {
+  const plugins: Plugin[] = [nodeResolve(), commonjs()];
   if (mode === MODE.DEV) {
     plugins.push(
       typescript({
         tsconfigOverride: {
           compilerOptions: {
             module: 'es2015',
-            target: 'es2017',
+            target: 'es2018',
             jsx: 'react',
-            jsxFactory: 'Px.createElement',
-            jsxFragmentFactory: 'Px.Fragment',
+            jsxFactory: 'Nebula.createElement',
+            jsxFragmentFactory: 'Nebula.Fragment',
           },
           exclude: ['node_modules'],
         },
@@ -41,8 +41,8 @@ function getRollupOptions(mode: MODE) {
         minify: true,
         target: 'es2017', // default, or 'es20XX', 'esnext'
         jsx: 'transform', // default, or 'preserve'
-        jsxFactory: 'Px.createElement',
-        jsxFragment: 'Px.Fragment',
+        jsxFactory: 'Nebula.createElement',
+        jsxFragment: 'Nebula.Fragment',
       }),
     );
   }
@@ -61,7 +61,9 @@ function getRollupOptions(mode: MODE) {
 
 async function build() {
   const startTime = Date.now();
-  const { inputOptions, outputOptions } = getRollupOptions(MODE.DEV);
+  const { inputOptions, outputOptions } = getRollupOptions(
+    process.env.mode as MODE,
+  );
   const bundle = await rollup(inputOptions);
   // await bundle.write(outputOptions);
   const { output } = await bundle.generate(outputOptions);

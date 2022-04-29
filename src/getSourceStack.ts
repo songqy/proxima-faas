@@ -9,7 +9,7 @@ const cacheSourceMap: CacheSourceMap = {
 
 const readSouceMap = () => {
   const { map } = getCacheCodes();
-  return map!;
+  return map;
 };
 
 // 两个数字数组相加
@@ -65,11 +65,14 @@ const decodeMappings = (mappings: string) => {
 
 // 解析sourcemap的坐标
 const parseSourceMap = () => {
-  if (cacheSourceMap.sources.length) return;
-  const { sources, mappings } = readSouceMap();
+  if (cacheSourceMap.sources.length) return true;
+  const sourceMap = readSouceMap();
+  if (!sourceMap) return false;
+  const { mappings, sources } = sourceMap;
   const arr = decodeMappings(mappings);
   cacheSourceMap.sources = sources;
   cacheSourceMap.mappingsCoordinate = arr;
+  return true;
 };
 
 // 根据调用栈的代码坐标获取源码的坐标
@@ -91,9 +94,10 @@ const replaceStackBySource = (target: string) => {
 };
 
 // 通过isolate抛出的调用栈解析出源码调用栈
-const getSourceStack = async (stack: string) => {
+const getSourceStack = (stack: string) => {
   // 解析sourcemap
-  parseSourceMap();
+  const hasSourceMap = parseSourceMap();
+  if (!hasSourceMap) return '';
 
   const newStack = stack.replace(/(\/.+)+:(\d)+:(\d)+/g, replaceStackBySource);
   return newStack;
