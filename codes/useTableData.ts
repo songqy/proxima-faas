@@ -1,4 +1,4 @@
-import { useState } from './nebula/ui';
+import { useState } from '@nebula/ui';
 
 const useTableData = () => {
   const [data, setData] = useState([

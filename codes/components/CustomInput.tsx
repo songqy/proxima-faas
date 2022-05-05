@@ -1,4 +1,4 @@
-import Nebula, { Input, useState, Space, Text } from '../nebula/ui';
+import NebulaUI, { Input, useState, Space, Text } from '@nebula/ui';
 
 const CustomInput = () => {
   const [text, setText] = useState('');

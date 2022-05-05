@@ -1,4 +1,4 @@
-import Nebula, {
+import NebulaUI, {
   renderApp,
   useState,
   useEffect,
@@ -6,8 +6,8 @@ import Nebula, {
   Space,
   Text,
   Table,
-} from './nebula/ui';
-import { fetch } from './nebula/api';
+} from '@nebula/ui';
+import { fetch } from '@nebula/api';
 import useTableData from './useTableData';
 import User from './components/User';
 import CustomInput from './components/CustomInput';
@@ -39,7 +39,7 @@ const App = (props: AppProps = {}) => {
   const { name = 'Plugin name' } = props;
   const [a, setA] = useState(initA);
   const [b, setB] = useState(() => 'abc');
-  const [c, setC] = useState({ c1: 2 });
+  const [c, setC] = useState({});
 
   const { d, increaseD } = useAppHook();
 
@@ -57,8 +57,13 @@ const App = (props: AppProps = {}) => {
     setB('fb111111 bbbbbb');
     setA(91);
     setA(92);
-    const res = await fetch();
-    setA(res);
+    const res: any = await fetch('http://127.0.0.1:4000/test-api', {
+      method: 'post',
+      json: {
+        time: Date.now(),
+      },
+    });
+    setA(res.time);
   };
 
   const fb2 = () => {
@@ -77,9 +82,9 @@ const App = (props: AppProps = {}) => {
   log('render', a, b, c, d);
 
   useEffect(async () => {
-    const res = await fetch();
+    const res: any = await fetch('http://127.0.0.1:4000/test-api');
     // setC({ c1: res });
-    setC(cloneDeep({ c1: res }));
+    setC(cloneDeep(res));
   }, [b]);
 
   return (

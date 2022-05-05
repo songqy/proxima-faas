@@ -23,8 +23,8 @@ function getRollupOptions(mode = MODE.DEV) {
             module: 'es2015',
             target: 'es2018',
             jsx: 'react',
-            jsxFactory: 'Nebula.createElement',
-            jsxFragmentFactory: 'Nebula.Fragment',
+            jsxFactory: 'NebulaUI.createElement',
+            jsxFragmentFactory: 'NebulaUI.Fragment',
           },
           exclude: ['node_modules'],
         },
@@ -39,10 +39,10 @@ function getRollupOptions(mode = MODE.DEV) {
         exclude: /node_modules/, // default
         // sourceMap: true, // by default inferred from rollup's `output.sourcemap` option
         minify: true,
-        target: 'es2017', // default, or 'es20XX', 'esnext'
+        target: 'es2018', // default, or 'es20XX', 'esnext'
         jsx: 'transform', // default, or 'preserve'
-        jsxFactory: 'Nebula.createElement',
-        jsxFragment: 'Nebula.Fragment',
+        jsxFactory: 'NebulaUI.createElement',
+        jsxFragment: 'NebulaUI.Fragment',
       }),
     );
   }

@@ -1,10 +1,8 @@
 import ivm from 'isolated-vm';
 import path from 'path';
-import axios, { AxiosRequestConfig } from 'axios';
-import getSourceStack from './getSourceStack';
+import parseSourceStack from './parseSourceStack';
 import { getCacheCodes } from './cacheCodes';
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { fetch } from './api';
 
 const isolate = new ivm.Isolate({ memoryLimit: 128 });
 
@@ -37,33 +35,19 @@ const getAppModule = async () => {
   const appContext = isolate.createContextSync();
   const jail = appContext.global;
   jail.setSync('global', jail.derefInto());
-  // 注入同步方法
+  // 注入全局方法
   appContext.evalClosureSync(
     `
       globalThis.log = $1
-      globalThis.setTimeout = (fn, ...rest) => $2(new $0.Reference(fn), ...rest);
+      globalThis.setTimeout = (fn, timeout) => $2(new $0.Reference(fn), timeout);
+      globalThis.fetch = (url, opts) => $3.apply(null, [url, new $0.Reference(opts)], { result: { promise: true, copy: true } });
     `,
     [
       ivm,
       (...args: any[]) => console.log(...args),
       (fn: any, timeout: number) =>
         void setTimeout(() => fn.applySync(), timeout),
-    ],
-  );
-  // 注入异步方法
-  appContext.evalClosure(
-    `
-      globalThis.fetch = (opts) => $0.apply(null, [opts], { result: { promise: true } });
-    `,
-    [
-      new ivm.Reference(async (opts: AxiosRequestConfig) => {
-        console.log('fetch', opts);
-        if (opts) {
-          return await axios(opts);
-        }
-        await sleep(200);
-        return 69328;
-      }),
+      new ivm.Reference(fetch),
     ],
   );
 
@@ -86,7 +70,7 @@ const render = async (renderData?: Record<string, any>) => {
   const jail = context.global;
   jail.setSync('global', jail.derefInto());
   // 注入全局变量
-  context.evalClosure(
+  context.evalClosureSync(
     'Object.entries($0).forEach(([ key, val ]) => globalThis[key] = val)',
     [{ renderData }],
     { arguments: { copy: true } },
@@ -112,7 +96,7 @@ const render = async (renderData?: Record<string, any>) => {
 
   const resObj = JSON.parse(result);
   if (resObj.stack) {
-    resObj.stack = getSourceStack(resObj.stack);
+    resObj.stack = parseSourceStack(resObj.stack);
   }
 
   return resObj;

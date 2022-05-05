@@ -1,13 +1,15 @@
-import Nebula, { Badge, Avatar, useState, useEffect } from '../nebula/ui';
+import NebulaUI, { Badge, Avatar, useState, useEffect } from '@nebula/ui';
 
 export interface UserProps {
   count?: number;
 }
 
+type SizeType = 'large' | 'small' | 'default';
+
 const User = (props: UserProps) => {
   const { count = 0 } = props;
 
-  const [size, setSize] = useState('small');
+  const [size, setSize] = useState<SizeType>('small');
 
   useEffect(() => {
     if (count < 5) {

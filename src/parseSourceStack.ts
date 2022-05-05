@@ -94,7 +94,7 @@ const replaceStackBySource = (target: string) => {
 };
 
 // 通过isolate抛出的调用栈解析出源码调用栈
-const getSourceStack = (stack: string) => {
+const parseSourceStack = (stack: string) => {
   // 解析sourcemap
   const hasSourceMap = parseSourceMap();
   if (!hasSourceMap) return '';
@@ -103,4 +103,4 @@ const getSourceStack = (stack: string) => {
   return newStack;
 };
 
-export default getSourceStack;
+export default parseSourceStack;
