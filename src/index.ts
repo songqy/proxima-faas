@@ -36,6 +36,26 @@ app.post('/', async (req, res, next) => {
   }
 });
 
+const MAX = 1000;
+
+app.get('/stress', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    const p = [];
+    for (let i = 0; i < MAX; ++i) {
+      p.push(render());
+    }
+    await Promise.all(p);
+    const endTime = Date.now();
+    res.json({
+      cost: endTime - startTime,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
 app.get('/404', (req, res) => {
   res.status(404).send('Not found');
 });
@@ -45,10 +65,10 @@ app.get('/500', (req, res) => {
 });
 
 // Error handler
-app.use(function (err, req, res: any) {
-  console.error(err);
-  res.status(500).send('Internal Serverless Error');
-});
+// app.use(function (err, req, res) {
+//   console.error(err);
+//   res.res.send('Internal Serverless Error');
+// });
 
 app.listen(9000, () => {
   console.log(`Server start on http://localhost:9000`);

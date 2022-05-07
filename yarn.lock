@@ -14,6 +14,18 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
+"@nebulare/api@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@nebulare/api/-/api-0.0.1.tgz#bb4f37b908ad35bacf1d6cb5cb7d21dacbb8fb1f"
+  integrity sha512-j1TMy81GFwc7bUfni3R9lH20Q9bCCoAlk64o/YBJLod1QKD3uDunKG4+vFwOtLtLBcQYvwyT717BamPV/aL9Zw==
+  dependencies:
+    got "^11.8.3"
+
+"@nebulare/ui@file:.yalc/@nebulare/ui":
+  version "0.0.1"
+  dependencies:
+    csstype "^3.0.11"
+
 "@rollup/plugin-commonjs@^21.1.0":
   version "21.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-21.1.0.tgz#45576d7b47609af2db87f55a6d4b46e44fc3a553"
@@ -371,6 +383,11 @@ create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
+
+csstype@^3.0.11:
+  version "3.0.11"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.11.tgz#d66700c5eacfac1940deb4e3ee5642792d85cd33"
+  integrity sha512-sa6P2wJ+CAbgyy4KFssIb/JNMLxFvKF1pCYCSXS8ZMuqZnMsrxqI2E5sPyoTpxoPU/gVZMzr2zjOfg8GIZOMsw==
 
 debug@2.6.9:
   version "2.6.9"

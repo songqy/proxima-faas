@@ -1,4 +1,4 @@
-import NebulaUI, { Badge, Avatar, useState, useEffect } from '@nebula/ui';
+import NebulaUI, { Badge, Avatar, useState, useEffect } from '@nebulare/ui';
 
 export interface UserProps {
   count?: number;
