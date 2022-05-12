@@ -4,6 +4,7 @@ import fetch from './utils/fetch';
 import Logger from './utils/logger';
 import { MODE } from './utils/constants';
 import { getCacheCodes } from './cacheCodes';
+import * as apis from './apis';
 
 const isolate = new ivm.Isolate({ memoryLimit: 512 });
 
@@ -40,6 +41,25 @@ const getAppModule = async (context: Context) => {
   return appModule;
 };
 
+// 注入apis方法
+const injectGlobalFunctions = (
+  context: Context,
+  globalName: string,
+  functionObjects: Record<string, Function>,
+) => {
+  const evalFuns = [];
+  const evalArgs = [];
+  const funNames = Object.keys(functionObjects);
+  for (let i = 0; i < funNames.length; ++i) {
+    evalFuns.push(
+      `${funNames[i]}: (...args) => $${i}.apply(null, args, { result: { promise: true, copy: true } })`,
+    );
+    evalArgs.push(new ivm.Reference(functionObjects[funNames[i]]));
+  }
+  const evalCode = `globalThis.${globalName} = {${evalFuns.join(',')}};`;
+  context.evalClosureSync(evalCode, evalArgs);
+};
+
 // 全局变量context
 const getContext = (renderData?: Record<string, any>) => {
   const logger = new Logger(MODE.DEV);
@@ -69,6 +89,8 @@ const getContext = (renderData?: Record<string, any>) => {
       new ivm.Reference(fetch),
     ],
   );
+
+  injectGlobalFunctions(context, 'apis', apis);
 
   return context;
 };
