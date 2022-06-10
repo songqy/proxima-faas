@@ -1,4 +1,4 @@
-import { MODE } from './constants';
+import { MODE } from '../constants';
 
 export default class Logger {
   _mode: MODE;

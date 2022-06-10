@@ -1,6 +1,7 @@
 import express from 'express';
 import render from './render';
 import build from '../build';
+import { testComplieMain, testComplieApp } from './test-c';
 
 import 'dotenv/config';
 
@@ -46,6 +47,21 @@ app.get('/stress', async (req, res) => {
       p.push(render());
     }
     await Promise.all(p);
+    const endTime = Date.now();
+    res.json({
+      cost: endTime - startTime,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(e.message);
+  }
+});
+
+app.get('/stress-c', async (req, res) => {
+  try {
+    const startTime = Date.now();
+    // await testComplieMain();
+    await testComplieApp();
     const endTime = Date.now();
     res.json({
       cost: endTime - startTime,

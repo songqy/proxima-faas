@@ -1,12 +1,11 @@
 import { rollup, OutputOptions, Plugin, RollupOptions } from 'rollup';
 import path from 'path';
-import fs from 'fs';
+import fse from 'fs-extra';
 import esbuild from 'rollup-plugin-esbuild';
 import typescript from 'rollup-plugin-typescript2';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import cleanup from 'rollup-plugin-cleanup';
-import { setCacheCodes } from '../src/cacheCodes';
 
 enum MODE {
   DEV = 'development',
@@ -64,17 +63,17 @@ async function build() {
   const { inputOptions, outputOptions } = getRollupOptions(
     process.env.mode as MODE,
   );
+  await fse.emptyDir(path.resolve('output'));
   const bundle = await rollup(inputOptions);
   // await bundle.write(outputOptions);
   const { output } = await bundle.generate(outputOptions);
   const { code, map } = output[0];
-  setCacheCodes({ code, map });
 
-  await fs.promises.writeFile(path.resolve('output/index.js'), code);
+  await fse.writeFile(path.resolve('output/index.js'), code);
   if (map) {
     map.sourcesContent = [];
     map.names = [];
-    await fs.promises.writeFile(
+    await fse.writeFile(
       path.resolve('output/index.js.map'),
       JSON.stringify(map),
     );

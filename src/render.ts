@@ -1,13 +1,13 @@
-import parseSourceStack from './parseSourceStack';
-import { runScript } from './ivm';
+import path from 'path';
 
-const render = async (renderData?: Record<string, any>) => {
-  const result = await runScript(renderData);
-  if (result.stack) {
-    result.stack = parseSourceStack(result.stack);
-  }
+import { IsolateSandbox } from '@nebulare/runtime';
 
-  return result;
+const sanbox = new IsolateSandbox(128);
+
+const render = async (params?: Record<string, any>) => {
+  const filename = path.resolve('output');
+
+  return await sanbox.executeApp(filename, 'index.render', params);
 };
 
 export default render;

@@ -15,6 +15,7 @@ import NebulaUI, {
 import User from './components/User';
 import ModalDialog from './components/ModalDialog';
 import { cloneDeep } from 'lodash-es';
+// import * as _ from 'lodash';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -45,15 +46,13 @@ const App = () => {
     setB('fb111111 bbbbbb');
     setA(91);
     setA(92);
-    const a1 = await apis.addTen(184);
-    setA(a1);
     // const res: any = await fetch('http://127.0.0.1:4000/test-api', {
     //   method: 'post',
-    //   json: {
+    //   data: {
     //     time: Date.now(),
     //   },
     // });
-    // setA(res.time);
+    // setA(res.t);
   };
 
   const fb2 = async () => {
@@ -72,12 +71,14 @@ const App = () => {
     throw new Error('fb4 error');
   };
 
-  // console.log('render', a, b, c, d);
+  console.log('render', a, b, c, d);
 
   useEffect(async () => {
-    // const res: any = await fetch('http://127.0.0.1:4000/test-api');
+    // const res: any = await fetch('http://127.0.0.1:4000/test-api', {
+    //   method: 'post',
+    // });
+    // setC(cloneDeep(res));
     const res = { c1: 111 };
-    // setC({ c1: res });
     setC(cloneDeep(res));
   }, [b]);
 
